@@ -78,43 +78,66 @@ const TemplateForm = () => {
       setError(error.response?.data?.message || "Failed to generate preview.");
     }
   };
+
   return (
-    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-10">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-        WhatsApp Template Parser
-      </h2>
+    <div className="max-w-3xl mx-auto p-8 bg-gradient-to-r from-teal-100 to-purple-100 shadow-xl rounded-lg mt-10 border border-gray-300">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-bold text-gray-900">
+          WhatsApp Template Parser
+        </h1>
+        <p className="text-gray-600 mt-2">
+          Easily parse and preview message templates
+        </p>
+      </div>
 
       <textarea
-        placeholder="Enter your template here..."
+        placeholder="Start typing your template here (e.g., Hello {{name}}!)..."
         value={template}
         onChange={handleTemplateChange}
         rows="5"
-        className="w-full p-4 border rounded-lg mb-4 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full p-4 border-2 rounded-lg mb-6 shadow-sm focus:outline-none focus:ring-4 focus:ring-teal-400 transition bg-white"
       />
 
-      <div className="space-y-4">
+      <div className="space-y-6">
+        {placeholders.length > 0 && (
+          <h3 className="text-lg font-medium text-gray-800 mb-2">
+            Fill in Placeholder Values
+          </h3>
+        )}
         {placeholders.map((placeholder) => (
-          <div key={placeholder} className="flex items-center gap-4">
-            <label className="text-gray-600 font-medium">{placeholder}:</label>
+          <div
+            key={placeholder}
+            className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-md"
+          >
+            <label className="text-gray-700 font-semibold">
+              {placeholder}:
+            </label>
             <input
               type="text"
               value={sampleData[placeholder] || ""}
               onChange={(e) => handleInputChange(placeholder, e.target.value)}
-              className="flex-grow p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow p-3 border-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
             />
           </div>
         ))}
       </div>
 
-      <button
-        onClick={handlePreview}
-        className="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600"
-      >
-        Generate Preview
-      </button>
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={handlePreview}
+          className="px-12 py-3 bg-gradient-to-r from-teal-500 to-purple-500 text-white font-bold rounded-full shadow-md hover:from-teal-600 hover:to-purple-600 transition-transform transform hover:scale-105"
+        >
+          Generate Preview
+        </button>
+      </div>
 
-      {error && <ErrorAlert message={error} />}
-      {preview && <Preview message={preview} />}
+      {error && (
+        <div className="mt-6">
+          <ErrorAlert message={error} onClose={() => setError("")} />
+        </div>
+      )}
+
+      {preview && <Preview message={preview} onClose={() => setPreview("")} />}
     </div>
   );
 };
